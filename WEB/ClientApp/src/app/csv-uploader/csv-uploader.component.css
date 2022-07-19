@@ -1,0 +1,15 @@
+.file-input {
+    display: none;
+  }
+
+.buttons-panel{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+.buttons-panel>*{
+  margin-right: 10px;
+  width: 100px;
+}

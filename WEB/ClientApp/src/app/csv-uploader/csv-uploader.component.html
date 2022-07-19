@@ -1,0 +1,22 @@
+<div>
+        <!-- {{fileToUpload || "No file uploaded yet."}} -->
+    <!-- <form method="post" enctype="multipart/form-data"> -->
+        <div>
+            <label>
+                CSV file selection: 
+                <i class="fa fa-2x fa-camera"></i>
+                <input type="file" id="file" name="file" 
+                    (change)="handleFileInput($event.target.files)" accept=".csv"/>
+                <!-- <span *ngIf="fileToUpload && fileToUpload.name" for="file">
+                </span> -->
+            </label>
+            
+        </div>
+        <div class="buttons-panel">
+            <button (click)="handleFileInput()">Uppload</button>
+            <button >Download</button>
+            <button >Delete</button>
+        </div>
+   
+    <!-- </form> -->
+</div>
