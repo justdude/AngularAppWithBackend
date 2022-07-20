@@ -38,6 +38,10 @@ namespace API.Services
         {
             return _marketData.Sum(c => c.Price);
         }
+        public DateTime FindStartDate()
+        {
+            return _marketData.First().Time;//assumtion that they are always in some ranges
+        }
 
         public void Build()
         {
@@ -45,6 +49,7 @@ namespace API.Services
             _periodData.LastPrice = ComputeLastPricePrice();
             _periodData.MaxPrice = ComputeMaxPrice();
             _periodData.MinPrice = ComputeMinPrice();
+            _periodData.Time = FindStartDate();
             _periodData.Sum = ComputeSum();
         }
 

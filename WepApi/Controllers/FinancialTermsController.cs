@@ -19,12 +19,11 @@ namespace API.Controllers
     {
         private readonly ILogger<FinancialTermsController> _logger;
         private readonly IPeriodDataService _periodDataService;
-        private CsvStorage _csvStorage;
+        private static CsvStorage _csvStorage = new CsvStorage();
 
         public FinancialTermsController(ILogger<FinancialTermsController> logger)
         {
             _logger = logger;
-            _csvStorage = new CsvStorage();
             _periodDataService = new PeriodDataService();
         }
 
@@ -52,21 +51,20 @@ namespace API.Controllers
                 _logger.LogError($"SetCsv {e.Message}");
                 return BadRequest();
             }
-            
         }
 
         [HttpDelete("csv")]
-        [DisableRequestSizeLimit]
         public async Task<IActionResult> ClearCsv()
         {
-            _csvStorage.Data = null;
+            _csvStorage.Data = new MarketData[]{};
             return Ok();
         }
 
         [HttpGet("periodData")]
-        public IEnumerable<PeriodData> GetPeriodData(double? millisecondsInterval)
+        public IEnumerable<PeriodData> GetPeriodData(long millisecondsInterval)
         {
-            var periodData = _periodDataService.ComputePeriodData(_csvStorage.Data, TimeSpan.FromMilliseconds(millisecondsInterval ?? 1000 * 60));
+            millisecondsInterval = 60000;//TODO take a look after lunch
+            var periodData = _periodDataService.ComputePeriodData(_csvStorage.Data, TimeSpan.FromMilliseconds(millisecondsInterval));
             return periodData;
         }
 
