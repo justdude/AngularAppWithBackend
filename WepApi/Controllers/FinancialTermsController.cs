@@ -3,9 +3,13 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Threading.Tasks;
 using API.Interfaces;
 using API.Models;
 using API.Services;
+using Microsoft.AspNetCore.Http;
+using API.Extensions;
 
 namespace API.Controllers
 {
@@ -31,11 +35,31 @@ namespace API.Controllers
         }
 
         [HttpPost("csv")]
-        public IActionResult SetCsv([FromBody]string csvText)
+        [Produces("application/json")]
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> SetCsv([FromForm] IFormFile file)
         {
-            _csvStorage.CsvStr = csvText;
-            var provider = new MarketDataCsvProvider();
-            _csvStorage.Data = provider.Parse(_csvStorage.CsvStr, DateTimeFormatInfo.InvariantInfo); ;
+            try
+            {
+                _csvStorage.CsvStr = await FileReader.ReadFormFileAsync(file);
+
+                var provider = new MarketDataCsvProvider();
+                _csvStorage.Data = provider.Parse(_csvStorage.CsvStr, Constants.Formats.DateTimeFormat);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"SetCsv {e.Message}");
+                return BadRequest();
+            }
+            
+        }
+
+        [HttpDelete("csv")]
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> ClearCsv()
+        {
+            _csvStorage.Data = null;
             return Ok();
         }
 
