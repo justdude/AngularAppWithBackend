@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Component, OnInit,Input } from '@angular/core';
 import { catchError, map, tap } from 'rxjs/operators';
-import { financeStateService } from "../finance-state.service";
-import { WebConstsService } from '../web-consts.service';
+import { financeStateService } from "../../services/finance-state.service";
+import { WebConstsService } from '../../services/web-consts.service';
 
 
 @Component({
@@ -15,7 +15,8 @@ export class CsvUploaderComponent implements OnInit {
   fileToUpload: File | null = null;
 
   constructor(private http: HttpClient, 
-              private constService: WebConstsService) {}
+              private constService: WebConstsService,
+              private financeStateService : financeStateService) {}
 
   ngOnInit(): void {
   }
@@ -31,7 +32,6 @@ export class CsvUploaderComponent implements OnInit {
 
   uploadFileToActivity() {
     this.isloading = true;
-    console.log("uploadFileToActivity");
     this.postFile(this.fileToUpload).subscribe(data => {
       this.isloading = false;
       }, error => {
@@ -41,21 +41,21 @@ export class CsvUploaderComponent implements OnInit {
 
   raiseRefresh(successful:boolean){
     console.log(`updated `);
+    this.financeStateService.updateState(successful);
   }
 
   postFile(fileToUpload: File){
-    // const formData: FormData = new FormData();
-    // formData.append('fileKey', fileToUpload, fileToUpload.name);
-    const req = new HttpRequest('POST', this.constService.Csv, fileToUpload, {
-      reportProgress: false
-    });
-
+    const formData = new FormData();
+    formData.append("thumbnail", fileToUpload);
+    
     var httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+      headers: new HttpHeaders({ 
+        'Access-Control-Allow-Origin': '*' ,
+        'Accept': 'application/json'})
     };
     
     return this.http
-      .post(this.constService.Csv, fileToUpload, httpOptions)
+      .post(this.constService.Csv, formData, httpOptions)
       .pipe(
         tap(_ => this.raiseRefresh(true)),
         tap(_ => this.raiseRefresh(false))

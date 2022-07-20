@@ -1,0 +1,46 @@
+ <div class="search ">
+    <input class="bg-white" 
+    placeholder="Search"
+    (keyup)="applyFilter($event.target.value)"
+    type="text" placeholder="Search" aria-invalid="false">
+</div>
+<div class="scrollable-wrapper">
+  <table class='table table-striped table table-hover ' *ngIf="financeInfos">
+    <thead>
+      <tr>
+        <th>
+          <span *ngIf="sortType == 'Id'" class="fa fa-caret-up ng-hide" aria-hidden="true"></span>
+          <span *ngIf="sortType == 'Id'" class="fa fa-caret-down ng-hide" aria-hidden="true"></span>
+          <a (click)="onSort('Id')">Id</a>
+        </th>
+        <th>
+          <span *ngIf="sortType == 'FirstPrice'" class="fa fa-caret-up ng-hide" aria-hidden="true"></span>
+          <span *ngIf="sortType == 'FirstPrice'" class="fa fa-caret-down ng-hide" aria-hidden="true"></span>
+          <a (click)="onSort('FirstPrice')">FirstPrice</a>
+        </th>
+        <th>LastPrice</th>
+        <th>MaxPrice</th>
+        <th>MinPrice</th>
+        <th>Sum</th>
+        <th>
+          <span *ngIf="sortType == 'Time'" class="fa fa-caret-up ng-hide" aria-hidden="true"></span>
+          <span *ngIf="sortType == 'Time'" class="fa fa-caret-down ng-hide" aria-hidden="true"></span>
+          <a (click)="onSort('Time')">Time</a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let financeInfo of financeInfos">
+        <td>{{ financeInfo.Id }}</td>
+        <td>{{ financeInfo.FirstPrice }}</td>
+        <td>{{ financeInfo.LastPrice }}</td>
+        <td>{{ financeInfo.MaxPrice }}</td>
+        <td>{{ financeInfo.MinPrice }}</td>
+        <td>{{ financeInfo.Sum }}</td>
+        <td>{{ financeInfo.Time | date:'shortTime' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<p *ngIf="!financeInfos"><em>There is no data for grid</em></p>
+<!-- <input></input> -->

@@ -1,0 +1,16 @@
+.scrollable-wrapper {
+    max-height: calc(35vh - 20px);
+    overflow: auto;
+  }
+  
+  .scrollable-wrapper table thead th {
+    background: #e9ecef;
+    position: sticky;
+    top: 0;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  }
+
+  .search{
+    margin: 10px 0;
+    width: 280px;
+  }
