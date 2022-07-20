@@ -21,7 +21,7 @@ export class CsvUploaderComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  handleFileInput(files: FileList) {
+  public handleFileInput(files: FileList) {
     if (files.length <=0 ){
       this.raiseRefresh(false);
       return;
@@ -29,24 +29,45 @@ export class CsvUploaderComponent implements OnInit {
 
     this.fileToUpload = files.item(0);
   }
-
-  uploadFileToActivity() {
-    this.isloading = true;
-    this.postFile(this.fileToUpload).subscribe(data => {
+  
+  public downloadFile(){
+    var res = this.http
+    .get<string>(`${this.constService.Csv}`)
+    .pipe()
+    .subscribe(data => {
       this.isloading = false;
+      this.success();
       }, error => {
-        console.log(error);
+        this.error();
       });
   }
 
-  raiseRefresh(successful:boolean){
-    console.log(`updated `);
-    this.financeStateService.updateState(successful);
+  public clearFile(){
+
+    this.http
+    .delete(`${this.constService.Csv}`)
+    .pipe()
+    .subscribe(data => {
+      this.isloading = false;
+      this.success();
+      }, error => {
+        this.error();
+      });
+  }
+  
+  public uploadFileToActivity() {
+    this.isloading = true;
+    this.postFile(this.fileToUpload).subscribe(data => {
+      this.isloading = false;
+      this.raiseRefresh(true);
+      }, error => {
+        this.raiseRefresh(false);
+      });
   }
 
   postFile(fileToUpload: File){
     const formData = new FormData();
-    formData.append("thumbnail", fileToUpload);
+    formData.append("file", fileToUpload);
     
     var httpOptions = {
       headers: new HttpHeaders({ 
@@ -57,9 +78,17 @@ export class CsvUploaderComponent implements OnInit {
     return this.http
       .post(this.constService.Csv, formData, httpOptions)
       .pipe(
-        tap(_ => this.raiseRefresh(true)),
-        tap(_ => this.raiseRefresh(false))
       );
   }
 
+  error(){
+  }
+
+  success(){
+  }
+  
+  raiseRefresh(successful:boolean){
+    console.log(`updated `);
+    this.financeStateService.updateState(successful);
+  }
 }

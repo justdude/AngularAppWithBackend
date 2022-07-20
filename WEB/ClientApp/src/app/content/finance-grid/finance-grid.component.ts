@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { financeStateService } from "../../services/finance-state.service";
 import { WebConstsService } from '../../services/web-consts.service';
 
@@ -22,6 +22,7 @@ export class FinanceGridComponent implements OnInit {
     private financeStateService : financeStateService
     ) {
     this.financeInfos = new Array();
+    this.sortReverse = true;
   }
 
   ngOnInit(): void {
@@ -29,12 +30,16 @@ export class FinanceGridComponent implements OnInit {
   }
 
   reloadTable():void{
-    //var path = this.constService.PeriodData+'/'+1000 * 60;
-    var path = "https://62d7448551e6e8f06f1a946d.mockapi.io/api/v1/griddata";
+    
+    const options = 
+   { params: new HttpParams({fromString: 'millisecondsInterval=60000'})};
+    var path = (`${this.constService.PeriodData}`);
+    //var path = "https://62d7448551e6e8f06f1a946d.mockapi.io/api/v1/griddata";
     this.http.get<PeriodData[]>(path)
     .subscribe(result => {
       this.financeInfos = result;
       this.financeInfosSource = result;
+      this.onSort('time');
     }, error => console.error(error));
   }
   
@@ -44,19 +49,19 @@ export class FinanceGridComponent implements OnInit {
       this.financeInfos = this.financeInfosSource;
     } else {
        this.financeInfos = this.financeInfosSource.filter((item) => 
-                        item.FirstPrice.toString().includes(filterValueLower) || 
-                        item.LastPrice.toString().includes(filterValueLower) || 
-                        item.MaxPrice.toString().includes(filterValueLower) || 
-                        item.MaxPrice.toString().includes(filterValueLower) || 
-                        item.Time.toString().includes(filterValueLower) || 
-                        item.Sum.toString().includes(filterValueLower));
+                        item.firstPrice.toString().includes(filterValueLower) || 
+                        item.lastPrice.toString().includes(filterValueLower) || 
+                        item.maxPrice.toString().includes(filterValueLower) || 
+                        item.maxPrice.toString().includes(filterValueLower) || 
+                        item.time.toString().includes(filterValueLower) || 
+                        item.sum.toString().includes(filterValueLower));
     }
   }
 
   onSort(column:string){
-    this.sortReverse = !this.sortReverse;
     this.sortType = column;
-    this.sortByColumn(this.financeInfos, column, this.sortReverse ? 'desc' : 'asc');
+    this.financeInfos = this.sortByColumn(this.financeInfos, column, this.sortReverse ? 'desc' : 'asc');
+    this.sortReverse = !this.sortReverse;
   }
 
    sortByColumn(list: any[] | undefined, column:string, direction = 'desc'): any[] {
@@ -77,12 +82,12 @@ export class FinanceGridComponent implements OnInit {
 
 interface PeriodData
 {
-    Id:number;
-    FirstPrice:number;
-    LastPrice:number;
-    MaxPrice:number;
-    MinPrice:number;
-    Sum:number;
-    Time:Date;
+    id:number;
+    firstPrice:number;
+    lastPrice:number;
+    maxPrice:number;
+    minPrice:number;
+    sum:number;
+    time:Date;
 }
 

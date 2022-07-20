@@ -5,14 +5,12 @@
                 <i class="fa fa-2x fa-camera"></i>
                 <input type="file" id="file" name="file" 
                     (change)="handleFileInput($event.target.files)" accept=".csv"/>
-                <!-- <span *ngIf="fileToUpload && fileToUpload.name" for="file">
-                </span> -->
             </label>
             
         </div>
         <div class="buttons-panel">
-            <button (click)="uploadFileToActivity()">Uppload</button>
-            <button >Download</button>
-            <button >Delete</button>
+            <button [disabled]="!fileToUpload || !fileToUpload.name" (click)="uploadFileToActivity()">Uppload</button>
+            <button (click)="downloadFile()">Download</button>
+            <button (click)="clearFile()">Delete</button>
         </div>
 </div>

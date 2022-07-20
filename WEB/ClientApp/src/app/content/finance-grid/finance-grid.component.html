@@ -31,13 +31,13 @@
     </thead>
     <tbody>
       <tr *ngFor="let financeInfo of financeInfos">
-        <td>{{ financeInfo.Id }}</td>
-        <td>{{ financeInfo.FirstPrice }}</td>
-        <td>{{ financeInfo.LastPrice }}</td>
-        <td>{{ financeInfo.MaxPrice }}</td>
-        <td>{{ financeInfo.MinPrice }}</td>
-        <td>{{ financeInfo.Sum }}</td>
-        <td>{{ financeInfo.Time | date:'shortTime' }}</td>
+        <td>{{ financeInfo.id }}</td>
+        <td>{{ financeInfo.firstPrice }}</td>
+        <td>{{ financeInfo.lastPrice }}</td>
+        <td>{{ financeInfo.maxPrice }}</td>
+        <td>{{ financeInfo.minPrice }}</td>
+        <td>{{ financeInfo.sum }}</td>
+        <td>{{ financeInfo.time | date:'h:mm:ss' }}</td>
       </tr>
     </tbody>
   </table>
