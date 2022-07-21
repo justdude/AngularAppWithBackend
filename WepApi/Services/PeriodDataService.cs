@@ -12,6 +12,7 @@ namespace API.Services
     {
         public Dictionary<DateTime, MarketData[]> GroupMarketDataWithRange(MarketData[] marketData, TimeSpan interval)
         {
+            if (interval.TotalMilliseconds == 0) return new Dictionary<DateTime, MarketData[]>();
             return marketData.GroupBy(c => c.Time.Ticks / interval.Ticks)
                 .ToDictionary(k => new DateTime( k.Key * interval.Ticks), v => v.ToArray());
         }
