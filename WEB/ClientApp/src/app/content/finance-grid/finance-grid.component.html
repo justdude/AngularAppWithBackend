@@ -9,11 +9,6 @@
     <thead>
       <tr>
         <th>
-          <span *ngIf="sortType == 'Id'" class="fa fa-caret-up ng-hide" aria-hidden="true"></span>
-          <span *ngIf="sortType == 'Id'" class="fa fa-caret-down ng-hide" aria-hidden="true"></span>
-          <a (click)="onSort('Id')">Id</a>
-        </th>
-        <th>
           <span *ngIf="sortType == 'FirstPrice'" class="fa fa-caret-up ng-hide" aria-hidden="true"></span>
           <span *ngIf="sortType == 'FirstPrice'" class="fa fa-caret-down ng-hide" aria-hidden="true"></span>
           <a (click)="onSort('FirstPrice')">FirstPrice</a>
@@ -31,7 +26,6 @@
     </thead>
     <tbody>
       <tr *ngFor="let financeInfo of financeInfos">
-        <td>{{ financeInfo.id }}</td>
         <td>{{ financeInfo.firstPrice }}</td>
         <td>{{ financeInfo.lastPrice }}</td>
         <td>{{ financeInfo.maxPrice }}</td>
