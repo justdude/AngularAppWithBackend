@@ -31,9 +31,8 @@ export class FinanceGridComponent implements OnInit {
 
   reloadTable():void{
     
-    const options = 
-   { params: new HttpParams({fromString: 'millisecondsInterval=60000'})};
-    var path = (`${this.constService.PeriodData}`);
+    const millisecondsInterval= 1000 * 60;
+    const path = `${this.constService.PeriodData}/${millisecondsInterval}`;
     //var path = "https://62d7448551e6e8f06f1a946d.mockapi.io/api/v1/griddata";
     this.http.get<PeriodData[]>(path)
     .subscribe(result => {
@@ -82,7 +81,7 @@ export class FinanceGridComponent implements OnInit {
 
 interface PeriodData
 {
-    id:number;
+    rowNumb:number;
     firstPrice:number;
     lastPrice:number;
     maxPrice:number;
