@@ -60,10 +60,9 @@ namespace API.Controllers
             return Ok();
         }
 
-        [HttpGet("periodData")]
+        [HttpGet("periodData/{millisecondsInterval}")]
         public IEnumerable<PeriodData> GetPeriodData(long millisecondsInterval)
         {
-            millisecondsInterval = 60000;//TODO take a look after lunch
             var periodData = _periodDataService.ComputePeriodData(_csvStorage.Data, TimeSpan.FromMilliseconds(millisecondsInterval));
             return periodData;
         }
