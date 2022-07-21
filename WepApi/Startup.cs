@@ -53,6 +53,11 @@ namespace API
             app.UseMiddleware<CorsMiddleware>();
 
             app.UseHttpsRedirection();
+            if (!env.IsDevelopment())
+            {
+                app.UseExceptionHandler("/error");
+            }
+
             app.UseStaticFiles();
             app.UseRouting();
             //app.UseAuthorization();
