@@ -26,11 +26,8 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-			//TODO: implement swagger <3
-            //https://docs.microsoft.com/ru-ru/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-6.0&tabs=visual-studio
-            //services.AddSwaggerGen(c => {});
-            //services.AddNewtonsoftJson()
-			services.AddCors();
+            services.AddSwaggerGen();
+            services.AddCors();
             services.AddControllers();
 			
         }
@@ -41,6 +38,12 @@ namespace API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                    options.RoutePrefix = string.Empty;
+                });
             }
             app.UseCors(builder =>
                 builder.AllowAnyOrigin()
